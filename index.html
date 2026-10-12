@@ -1,168 +1,304 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LMCP Notes | B.Pharm Study Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LMCP Notes</title>
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f6f7fb;
-      color: #20243a;
-    }
-    header {
-      background: #fff;
-      padding: 18px;
-      border-bottom: 1px solid #e5e7eb;
-    }
-    .brand {
-      font-size: 24px;
-      font-weight: 800;
-      color: #6d42d8;
-    }
-    header p { margin-bottom: 0; color: #667085; }
-    .hero {
-      padding: 34px 20px;
-      color: white;
-      background: linear-gradient(135deg, #5633b7, #9165ef);
-    }
-    .hero h1 { margin: 0 0 10px; font-size: 30px; }
-    .hero p { line-height: 1.6; }
-    .search {
-      width: 100%;
-      padding: 14px;
-      border: 0;
-      border-radius: 10px;
-      font-size: 16px;
-      margin-top: 12px;
-    }
-    main { padding: 22px 16px; max-width: 900px; margin: auto; }
-    h2 { font-size: 21px; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 13px;
-    }
-    .card {
-      background: white;
-      padding: 17px;
-      border: 1px solid #e8e8f0;
-      border-radius: 14px;
-    }
-    .card .emoji { font-size: 27px; }
-    .card h3 { margin: 10px 0 6px; font-size: 17px; }
-    .card p { color: #667085; font-size: 13px; line-height: 1.5; }
-    .tag {
-      display: inline-block;
-      background: #f0eaff;
-      color: #6339c3;
-      padding: 6px 9px;
-      border-radius: 7px;
-      font-size: 12px;
-    }
-    .notice {
-      margin-top: 22px;
-      padding: 16px;
-      background: white;
-      border-radius: 12px;
-      line-height: 1.6;
-    }
-    footer {
-      text-align: center;
-      padding: 24px;
-      color: #667085;
-      font-size: 13px;
-    }
-    @media (max-width: 360px) {
-      .grid { grid-template-columns: 1fr; }
-    }
+    body { margin:0; font-family:Arial,sans-serif; background:#f5f6fb; color:#22243a; }
+    header { background:#603bd0; color:white; padding:22px; }
+    header h1 { margin:0 0 8px; }
+    main { max-width:850px; margin:auto; padding:18px; }
+    .card { background:white; border-radius:14px; padding:18px; margin:16px 0; border:1px solid #e5e7eb; }
+    input,select,button { width:100%; box-sizing:border-box; padding:12px; margin:7px 0; border-radius:8px; border:1px solid #d1d5db; font-size:15px; }
+    button { background:#603bd0; color:white; border:0; font-weight:bold; cursor:pointer; }
+    button.secondary { background:#eae5ff; color:#4930a2; }
+    button.danger { background:#b42318; }
+    .note { border-top:1px solid #eee; padding:12px 0; overflow-wrap:anywhere; }
+    .muted { color:#667085; font-size:14px; }
+    .hidden { display:none; }
+    #status { white-space:pre-wrap; overflow-wrap:anywhere; }
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">💊 LMCP Notes</div>
-    <p>Your B.Pharm Study Hub</p>
-  </header>
+<header>
+  <h1>💊 LMCP Notes</h1>
+  <div>B.Pharm Notes • Practicals • GTU Preparation</div>
+</header>
 
-  <section class="hero">
-    <h1>Study Smarter 📚</h1>
-    <p>B.Pharm notes, practicals and GTU exam preparation in one place.</p>
-    <input id="search" class="search"
-      placeholder="Search notes or subject..."
-      aria-label="Search subjects">
+<main>
+  <section class="card">
+    <h2>🔍 Find Notes</h2>
+    <input id="search" placeholder="Search subject, unit or title...">
+    <div id="notes"><p class="muted">Loading notes...</p></div>
   </section>
 
-  <main>
-    <h2>Explore Study Materials</h2>
-    <div class="grid" id="subjects">
-      <article class="card">
-        <div class="emoji">🧬</div>
-        <h3>Human Anatomy & Physiology</h3>
-        <p>HAP notes and study material</p>
-        <span class="tag">Semester 1</span>
-      </article>
-
-      <article class="card">
-        <div class="emoji">🧪</div>
-        <h3>Pharmaceutical Analysis</h3>
-        <p>Limit tests and chemistry notes</p>
-        <span class="tag">Semester 1</span>
-      </article>
-
-      <article class="card">
-        <div class="emoji">💊</div>
-        <h3>General Pharmacy</h3>
-        <p>Dosage forms and basic concepts</p>
-        <span class="tag">Semester 1</span>
-      </article>
-
-      <article class="card">
-        <div class="emoji">🌿</div>
-        <h3>Pharmacognosy</h3>
-        <p>Study notes and important topics</p>
-        <span class="tag">Semester 1</span>
-      </article>
-
-      <article class="card">
-        <div class="emoji">🔬</div>
-        <h3>Practicals & Journals</h3>
-        <p>Practical notes and viva preparation</p>
-        <span class="tag">Practical</span>
-      </article>
-
-      <article class="card">
-        <div class="emoji">📝</div>
-        <h3>GTU Question Papers</h3>
-        <p>Exam practice and revision material</p>
-        <span class="tag">Exam Prep</span>
-      </article>
+  <section class="card">
+    <h2>🔐 Admin Login</h2>
+    <p class="muted">ફક્ત અધિકૃત Admin account નો ઉપયોગ કરવો.</p>
+    <form id="loginForm">
+      <input id="email" type="email" placeholder="Admin email" required>
+      <input id="password" type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <div id="admin" class="hidden">
+      <p id="adminEmail"></p>
+      <button id="logout" class="secondary">Logout</button>
+      <hr>
+      <h3>📤 Upload Unit-wise PDF</h3>
+      <form id="uploadForm">
+        <label>Semester</label>
+        <select id="semester" required>
+          <option value="1">Semester 1</option>
+          <option value="2">Semester 2</option>
+          <option value="3">Semester 3</option>
+          <option value="4">Semester 4</option>
+          <option value="5">Semester 5</option>
+          <option value="6">Semester 6</option>
+          <option value="7">Semester 7</option>
+          <option value="8">Semester 8</option>
+        </select>
+        <label>Subject</label>
+        <input id="subject" placeholder="e.g. Human Anatomy & Physiology" required>
+        <label>Unit</label>
+        <select id="unit" required>
+          <option>Unit 1</option><option>Unit 2</option>
+          <option>Unit 3</option><option>Unit 4</option>
+          <option>Unit 5</option><option>Practicals</option>
+          <option>Question Papers</option>
+        </select>
+        <label>Notes title</label>
+        <input id="title" placeholder="e.g. Unit 1 - Introduction" required>
+        <label>Select PDF (maximum 10 MB)</label>
+        <input id="pdf" type="file" accept=".pdf,application/pdf" required>
+        <button id="uploadButton" type="submit">Upload PDF</button>
+      </form>
     </div>
+  </section>
+  <p id="status" class="muted" role="status"></p>
+</main>
 
-    <div class="notice">
-      <strong>📢 Notes Library</strong>
-      <p>Study materials will be added here as PDFs become available.</p>
-    </div>
-  </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "dirleyzhcikbsufynqzg";
+const SUPABASE_KEY = "sb_publishable_42U_nw07b6_TbEqJm4NxtA_Twzc_hWC";
 
-  <footer>
-    LMCP Notes · Made for B.Pharm Students
-  </footer>
+const ADMIN_UID = "27c47ba2-3b13-407f-91f2-9f17366ae003";
 
-  <script>
-    const search = document.getElementById("search");
-    const cards = document.querySelectorAll(".card");
+const statusBox = document.getElementById("status");
+const notesBox = document.getElementById("notes");
+const adminBox = document.getElementById("admin");
+const loginForm = document.getElementById("loginForm");
+const uploadForm = document.getElementById("uploadForm");
 
-    search.addEventListener("input", function () {
-      const query = search.value.toLowerCase().trim();
+let db = null;
+let allNotes = [];
 
-      cards.forEach(function (card) {
-        card.style.display = card.textContent
-          .toLowerCase().includes(query) ? "" : "none";
+function status(message) {
+  statusBox.textContent = message;
+}
+
+function ready() {
+  return SUPABASE_URL.startsWith("https://") &&
+    SUPABASE_KEY !== "sb_publishable_42U_nw07b6_TbEqJm4NxtA_Twzc_hWC" &&
+    ADMIN_UID !== "27c47ba2-3b13-407f-91f2-9f17366ae003";
+}
+
+if (ready() && window.supabase) {
+  db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  refreshNotes();
+} else {
+  notesBox.textContent = "Website setup બાકી છે. Supabase settings ભરો.";
+}
+
+function showAdmin(user) {
+  const allowed = !!user && user.id === ADMIN_UID;
+  adminBox.classList.toggle("hidden", !allowed);
+  loginForm.classList.toggle("hidden", !!user);
+  document.getElementById("adminEmail").textContent =
+    allowed ? "Logged in as Admin: " + user.email : "";
+}
+
+async function checkSession() {
+  if (!db) return;
+  const { data, error } = await db.auth.getSession();
+  if (error) status(error.message);
+  showAdmin(data.session?.user || null);
+}
+
+if (db) {
+  checkSession();
+  db.auth.onAuthStateChange((_event, session) => {
+    showAdmin(session?.user || null);
+  });
+}
+
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!db) return status("Supabase settings પહેલાં પૂર્ણ કરો.");
+
+  status("Logging in...");
+  const { data, error } = await db.auth.signInWithPassword({
+    email: document.getElementById("email").value.trim(),
+    password: document.getElementById("password").value
+  });
+
+  if (error) return status("Login failed: " + error.message);
+
+  if (data.user.id !== ADMIN_UID) {
+    await db.auth.signOut();
+    return status("આ account ને Admin access નથી.");
+  }
+
+  status("Admin login successful.");
+});
+
+document.getElementById("logout").addEventListener("click", async () => {
+  const { error } = await db.auth.signOut();
+  if (error) return status(error.message);
+  status("Logged out.");
+});
+
+uploadForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!db) return status("Supabase settings પહેલાં પૂર્ણ કરો.");
+
+  const { data: sessionData } = await db.auth.getSession();
+  const user = sessionData.session?.user;
+
+  if (!user || user.id !== ADMIN_UID)
+    return status("Admin login જરૂરી છે.");
+
+  const file = document.getElementById("pdf").files[0];
+  if (!file) return status("PDF પસંદ કર.");
+  if (file.type !== "application/pdf" || !file.name.toLowerCase().endsWith(".pdf"))
+    return status("માત્ર PDF file upload કરી શકાય.");
+  if (file.size > 10 * 1024 * 1024)
+    return status("PDF 10 MB કરતાં નાની હોવી જોઈએ.");
+
+  const semester = Number(document.getElementById("semester").value);
+  const subject = document.getElementById("subject").value.trim();
+  const unit = document.getElementById("unit").value;
+  const title = document.getElementById("title").value.trim();
+
+  if (!subject || !title) return status("Subject અને title ભરો.");
+
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = semester + "/" + crypto.randomUUID() + "-" + safeName;
+
+  const button = document.getElementById("uploadButton");
+  button.disabled = true;
+  status("PDF upload થઈ રહી છે...");
+
+  try {
+    const { error: uploadError } = await db.storage
+      .from("notes")
+      .upload(path, file, {
+        contentType: "application/pdf",
+        upsert: false
       });
+
+    if (uploadError) throw uploadError;
+
+    const { error: insertError } = await db.from("notes").insert({
+      title, semester, subject, unit, file_path: path
     });
-  </script>
+
+    if (insertError) {
+      await db.storage.from("notes").remove([path]);
+      throw insertError;
+    }
+
+    uploadForm.reset();
+    status("PDF સફળતાથી upload થઈ! 🎉");
+    await refreshNotes();
+  } catch (error) {
+    status("Upload error: " + error.message);
+  } finally {
+    button.disabled = false;
+  }
+});
+
+async function refreshNotes() {
+  if (!db) return;
+  const { data, error } = await db.from("notes")
+    .select("id,title,semester,subject,unit,file_path,created_at")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    notesBox.textContent = "Notes load error: " + error.message;
+    return;
+  }
+
+  allNotes = data || [];
+  renderNotes();
+}
+
+function renderNotes() {
+  notesBox.replaceChildren();
+
+  const query = document.getElementById("search").value.toLowerCase().trim();
+  const filtered = allNotes.filter(n =>
+    [n.title, n.subject, n.unit, String(n.semester)]
+      .some(v => v.toLowerCase().includes(query))
+  );
+
+  if (!filtered.length) {
+    notesBox.textContent = "હજી matching notes ઉપલબ્ધ નથી.";
+    return;
+  }
+
+  filtered.forEach(n => {
+    const item = document.createElement("div");
+    item.className = "note";
+
+    const heading = document.createElement("strong");
+    heading.textContent = n.title;
+
+    const detail = document.createElement("p");
+    detail.className = "muted";
+    detail.textContent = "Sem " + n.semester + " • " + n.subject + " • " + n.unit;
+
+    const download = document.createElement("button");
+    download.textContent = "View / Download PDF";
+    download.addEventListener("click", async () => {
+      const { data, error } = await db.storage
+        .from("notes").createSignedUrl(n.file_path, 3600);
+
+      if (error) return status("PDF error: " + error.message);
+      window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+    });
+
+    item.append(heading, detail, download);
+
+    const userPlaceholder = null;
+    // Delete button is shown only to the authorized Admin.
+    // Database and storage policies must enforce Admin permissions.
+    if (!adminBox.classList.contains("hidden")) {
+      const remove = document.createElement("button");
+      remove.textContent = "Delete note";
+      remove.className = "danger";
+      remove.addEventListener("click", async () => {
+        if (!confirm("આ note અને તેની PDF delete કરવી છે?")) return;
+        const { error: fileError } = await db.storage
+          .from("notes").remove([n.file_path]);
+        if (fileError) return status("PDF delete error: " + fileError.message);
+
+        const { error: rowError } = await db.from("notes")
+          .delete().eq("id", n.id);
+        if (rowError) return status("Record delete error: " + rowError.message);
+
+        status("Note deleted.");
+        await refreshNotes();
+      });
+      item.append(remove);
+    }
+
+    notesBox.append(item);
+  });
+}
+
+document.getElementById("search").addEventListener("input", renderNotes);
+</script>
 </body>
 </html>
