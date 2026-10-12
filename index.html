@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMCP Notes | B.Pharm Study Hub</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f6f7fb;
+      color: #20243a;
+    }
+    header {
+      background: #fff;
+      padding: 18px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .brand {
+      font-size: 24px;
+      font-weight: 800;
+      color: #6d42d8;
+    }
+    header p { margin-bottom: 0; color: #667085; }
+    .hero {
+      padding: 34px 20px;
+      color: white;
+      background: linear-gradient(135deg, #5633b7, #9165ef);
+    }
+    .hero h1 { margin: 0 0 10px; font-size: 30px; }
+    .hero p { line-height: 1.6; }
+    .search {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-top: 12px;
+    }
+    main { padding: 22px 16px; max-width: 900px; margin: auto; }
+    h2 { font-size: 21px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 13px;
+    }
+    .card {
+      background: white;
+      padding: 17px;
+      border: 1px solid #e8e8f0;
+      border-radius: 14px;
+    }
+    .card .emoji { font-size: 27px; }
+    .card h3 { margin: 10px 0 6px; font-size: 17px; }
+    .card p { color: #667085; font-size: 13px; line-height: 1.5; }
+    .tag {
+      display: inline-block;
+      background: #f0eaff;
+      color: #6339c3;
+      padding: 6px 9px;
+      border-radius: 7px;
+      font-size: 12px;
+    }
+    .notice {
+      margin-top: 22px;
+      padding: 16px;
+      background: white;
+      border-radius: 12px;
+      line-height: 1.6;
+    }
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #667085;
+      font-size: 13px;
+    }
+    @media (max-width: 360px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">💊 LMCP Notes</div>
+    <p>Your B.Pharm Study Hub</p>
+  </header>
+
+  <section class="hero">
+    <h1>Study Smarter 📚</h1>
+    <p>B.Pharm notes, practicals and GTU exam preparation in one place.</p>
+    <input id="search" class="search"
+      placeholder="Search notes or subject..."
+      aria-label="Search subjects">
+  </section>
+
+  <main>
+    <h2>Explore Study Materials</h2>
+    <div class="grid" id="subjects">
+      <article class="card">
+        <div class="emoji">🧬</div>
+        <h3>Human Anatomy & Physiology</h3>
+        <p>HAP notes and study material</p>
+        <span class="tag">Semester 1</span>
+      </article>
+
+      <article class="card">
+        <div class="emoji">🧪</div>
+        <h3>Pharmaceutical Analysis</h3>
+        <p>Limit tests and chemistry notes</p>
+        <span class="tag">Semester 1</span>
+      </article>
+
+      <article class="card">
+        <div class="emoji">💊</div>
+        <h3>General Pharmacy</h3>
+        <p>Dosage forms and basic concepts</p>
+        <span class="tag">Semester 1</span>
+      </article>
+
+      <article class="card">
+        <div class="emoji">🌿</div>
+        <h3>Pharmacognosy</h3>
+        <p>Study notes and important topics</p>
+        <span class="tag">Semester 1</span>
+      </article>
+
+      <article class="card">
+        <div class="emoji">🔬</div>
+        <h3>Practicals & Journals</h3>
+        <p>Practical notes and viva preparation</p>
+        <span class="tag">Practical</span>
+      </article>
+
+      <article class="card">
+        <div class="emoji">📝</div>
+        <h3>GTU Question Papers</h3>
+        <p>Exam practice and revision material</p>
+        <span class="tag">Exam Prep</span>
+      </article>
+    </div>
+
+    <div class="notice">
+      <strong>📢 Notes Library</strong>
+      <p>Study materials will be added here as PDFs become available.</p>
+    </div>
+  </main>
+
+  <footer>
+    LMCP Notes · Made for B.Pharm Students
+  </footer>
+
+  <script>
+    const search = document.getElementById("search");
+    const cards = document.querySelectorAll(".card");
+
+    search.addEventListener("input", function () {
+      const query = search.value.toLowerCase().trim();
+
+      cards.forEach(function (card) {
+        card.style.display = card.textContent
+          .toLowerCase().includes(query) ? "" : "none";
+      });
+    });
+  </script>
+</body>
+</html>
