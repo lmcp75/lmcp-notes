@@ -1,304 +1,497 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="gu">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LMCP Notes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LMCP Notes | Pharmacy Study Hub</title>
+  <meta name="description" content="LMCP B.Pharm students માટે semester-wise notes અને PDF study material.">
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
-    body { margin:0; font-family:Arial,sans-serif; background:#f5f6fb; color:#22243a; }
-    header { background:#603bd0; color:white; padding:22px; }
-    header h1 { margin:0 0 8px; }
-    main { max-width:850px; margin:auto; padding:18px; }
-    .card { background:white; border-radius:14px; padding:18px; margin:16px 0; border:1px solid #e5e7eb; }
-    input,select,button { width:100%; box-sizing:border-box; padding:12px; margin:7px 0; border-radius:8px; border:1px solid #d1d5db; font-size:15px; }
-    button { background:#603bd0; color:white; border:0; font-weight:bold; cursor:pointer; }
-    button.secondary { background:#eae5ff; color:#4930a2; }
-    button.danger { background:#b42318; }
-    .note { border-top:1px solid #eee; padding:12px 0; overflow-wrap:anywhere; }
-    .muted { color:#667085; font-size:14px; }
-    .hidden { display:none; }
-    #status { white-space:pre-wrap; overflow-wrap:anywhere; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #172033;
+    }
+    header {
+      background: #123c69;
+      color: white;
+      padding: 22px 16px;
+      text-align: center;
+    }
+    header h1 { margin: 0 0 8px; font-size: 30px; }
+    header p { margin: 0; color: #dbeafe; }
+    main { max-width: 950px; margin: auto; padding: 20px 14px; }
+    .panel {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      box-shadow: 0 3px 14px #0000000b;
+    }
+    h2 { margin-top: 0; font-size: 21px; }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 6px 0;
+      border-radius: 8px;
+      border: 1px solid #d3dbe7;
+      font-size: 15px;
+    }
+    button {
+      border: none;
+      background: #1769aa;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .55; cursor: wait; }
+    .secondary { background: #e9f1fb; color: #123c69; }
+    .danger { background: #b42318; }
+    .note {
+      border: 1px solid #e0e6ef;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 12px;
+      background: #fff;
+    }
+    .note h3 { margin: 0 0 8px; overflow-wrap: anywhere; }
+    .muted { color: #64748b; font-size: 14px; }
+    .status { margin: 10px 0; overflow-wrap: anywhere; }
+    .hidden { display: none !important; }
+    footer { text-align: center; padding: 22px; color: #64748b; }
+    .tag {
+      display: inline-block;
+      background: #eaf2ff;
+      color: #174a80;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
   </style>
 </head>
+
 <body>
 <header>
-  <h1>💊 LMCP Notes</h1>
-  <div>B.Pharm Notes • Practicals • GTU Preparation</div>
+  <h1>📚 LMCP Notes</h1>
+  <p>B.Pharm Study Material • Learn Better, Score Better</p>
 </header>
 
 <main>
-  <section class="card">
-    <h2>🔍 Find Notes</h2>
-    <input id="search" placeholder="Search subject, unit or title...">
-    <div id="notes"><p class="muted">Loading notes...</p></div>
+  <section class="panel">
+    <h2>🔍 Find Your Notes</h2>
+    <input id="search" type="search"
+      placeholder="Search subject, unit or notes title...">
+
+    <select id="semesterFilter">
+      <option value="">All Semesters</option>
+      <option value="1">Semester 1</option>
+      <option value="2">Semester 2</option>
+      <option value="3">Semester 3</option>
+      <option value="4">Semester 4</option>
+      <option value="5">Semester 5</option>
+      <option value="6">Semester 6</option>
+      <option value="7">Semester 7</option>
+      <option value="8">Semester 8</option>
+    </select>
+
+    <p class="muted">Choose a semester or search for your subject.</p>
+    <div id="notesList" class="status">Loading notes...</div>
   </section>
 
-  <section class="card">
+  <section class="panel">
     <h2>🔐 Admin Login</h2>
-    <p class="muted">ફક્ત અધિકૃત Admin account નો ઉપયોગ કરવો.</p>
+    <p class="muted">Authorized admin only.</p>
+
     <form id="loginForm">
-      <input id="email" type="email" placeholder="Admin email" required>
-      <input id="password" type="password" placeholder="Password" required>
-      <button type="submit">Login</button>
+      <input id="email" type="email" placeholder="Admin email"
+        autocomplete="username" required>
+      <input id="password" type="password" placeholder="Admin password"
+        autocomplete="current-password" required>
+      <button id="loginButton" type="submit">Login</button>
     </form>
-    <div id="admin" class="hidden">
-      <p id="adminEmail"></p>
-      <button id="logout" class="secondary">Logout</button>
-      <hr>
-      <h3>📤 Upload Unit-wise PDF</h3>
-      <form id="uploadForm">
-        <label>Semester</label>
-        <select id="semester" required>
-          <option value="1">Semester 1</option>
-          <option value="2">Semester 2</option>
-          <option value="3">Semester 3</option>
-          <option value="4">Semester 4</option>
-          <option value="5">Semester 5</option>
-          <option value="6">Semester 6</option>
-          <option value="7">Semester 7</option>
-          <option value="8">Semester 8</option>
-        </select>
-        <label>Subject</label>
-        <input id="subject" placeholder="e.g. Human Anatomy & Physiology" required>
-        <label>Unit</label>
-        <select id="unit" required>
-          <option>Unit 1</option><option>Unit 2</option>
-          <option>Unit 3</option><option>Unit 4</option>
-          <option>Unit 5</option><option>Practicals</option>
-          <option>Question Papers</option>
-        </select>
-        <label>Notes title</label>
-        <input id="title" placeholder="e.g. Unit 1 - Introduction" required>
-        <label>Select PDF (maximum 10 MB)</label>
-        <input id="pdf" type="file" accept=".pdf,application/pdf" required>
-        <button id="uploadButton" type="submit">Upload PDF</button>
-      </form>
-    </div>
+
+    <button id="logoutButton" class="secondary hidden" type="button">
+      Logout
+    </button>
+    <div id="loginStatus" class="status" role="status"></div>
   </section>
-  <p id="status" class="muted" role="status"></p>
+
+  <section id="adminPanel" class="panel hidden">
+    <h2>📤 Upload New Notes</h2>
+    <p class="muted">PDF only. Maximum file size: 10 MB.</p>
+
+    <form id="uploadForm">
+      <input id="title" type="text" placeholder="Notes title"
+        maxlength="150" required>
+
+      <select id="semester" required>
+        <option value="">Select Semester</option>
+        <option value="1">Semester 1</option>
+        <option value="2">Semester 2</option>
+        <option value="3">Semester 3</option>
+        <option value="4">Semester 4</option>
+        <option value="5">Semester 5</option>
+        <option value="6">Semester 6</option>
+        <option value="7">Semester 7</option>
+        <option value="8">Semester 8</option>
+      </select>
+
+      <input id="subject" type="text" placeholder="Subject name"
+        maxlength="120" required>
+
+      <input id="unit" type="text" placeholder="Unit (e.g. Unit 1)"
+        maxlength="80" required>
+
+      <input id="pdfFile" type="file" accept=".pdf,application/pdf" required>
+
+      <button id="uploadButton" type="submit">Upload PDF</button>
+    </form>
+
+    <div id="uploadStatus" class="status" role="status"></div>
+  </section>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<footer>LMCP Notes • Made for B.Pharm Students</footer>
+
 <script>
-const SUPABASE_URL = "dirleyzhcikbsufynqzg";
-const SUPABASE_KEY = "sb_publishable_42U_nw07b6_TbEqJm4NxtA_Twzc_hWC";
+  // Supabase project configuration
+  const SUPABASE_URL = "https://dirleyzhcikbsufynqzg.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_42U_nw07b6_TbEqJm4NxtA_Twzc_hWC";
+  const ADMIN_UID = "27c47ba2-3b13-407f-91f2-9f17366ae003";
 
-const ADMIN_UID = "27c47ba2-3b13-407f-91f2-9f17366ae003";
+  const $ = (id) => document.getElementById(id);
 
-const statusBox = document.getElementById("status");
-const notesBox = document.getElementById("notes");
-const adminBox = document.getElementById("admin");
-const loginForm = document.getElementById("loginForm");
-const uploadForm = document.getElementById("uploadForm");
+  const notesList = $("notesList");
+  const loginStatus = $("loginStatus");
+  const uploadStatus = $("uploadStatus");
 
-let db = null;
-let allNotes = [];
+  let db = null;
+  let allNotes = [];
+  let currentUser = null;
 
-function status(message) {
-  statusBox.textContent = message;
-}
-
-function ready() {
-  return SUPABASE_URL.startsWith("https://") &&
-    SUPABASE_KEY !== "sb_publishable_42U_nw07b6_TbEqJm4NxtA_Twzc_hWC" &&
-    ADMIN_UID !== "27c47ba2-3b13-407f-91f2-9f17366ae003";
-}
-
-if (ready() && window.supabase) {
-  db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  refreshNotes();
-} else {
-  notesBox.textContent = "Website setup બાકી છે. Supabase settings ભરો.";
-}
-
-function showAdmin(user) {
-  const allowed = !!user && user.id === ADMIN_UID;
-  adminBox.classList.toggle("hidden", !allowed);
-  loginForm.classList.toggle("hidden", !!user);
-  document.getElementById("adminEmail").textContent =
-    allowed ? "Logged in as Admin: " + user.email : "";
-}
-
-async function checkSession() {
-  if (!db) return;
-  const { data, error } = await db.auth.getSession();
-  if (error) status(error.message);
-  showAdmin(data.session?.user || null);
-}
-
-if (db) {
-  checkSession();
-  db.auth.onAuthStateChange((_event, session) => {
-    showAdmin(session?.user || null);
-  });
-}
-
-loginForm.addEventListener("submit", async event => {
-  event.preventDefault();
-  if (!db) return status("Supabase settings પહેલાં પૂર્ણ કરો.");
-
-  status("Logging in...");
-  const { data, error } = await db.auth.signInWithPassword({
-    email: document.getElementById("email").value.trim(),
-    password: document.getElementById("password").value
-  });
-
-  if (error) return status("Login failed: " + error.message);
-
-  if (data.user.id !== ADMIN_UID) {
-    await db.auth.signOut();
-    return status("આ account ને Admin access નથી.");
+  function setStatus(element, message, isError = false) {
+    element.textContent = message;
+    element.style.color = isError ? "#b42318" : "#17633b";
   }
 
-  status("Admin login successful.");
-});
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[char]);
+  }
 
-document.getElementById("logout").addEventListener("click", async () => {
-  const { error } = await db.auth.signOut();
-  if (error) return status(error.message);
-  status("Logged out.");
-});
-
-uploadForm.addEventListener("submit", async event => {
-  event.preventDefault();
-  if (!db) return status("Supabase settings પહેલાં પૂર્ણ કરો.");
-
-  const { data: sessionData } = await db.auth.getSession();
-  const user = sessionData.session?.user;
-
-  if (!user || user.id !== ADMIN_UID)
-    return status("Admin login જરૂરી છે.");
-
-  const file = document.getElementById("pdf").files[0];
-  if (!file) return status("PDF પસંદ કર.");
-  if (file.type !== "application/pdf" || !file.name.toLowerCase().endsWith(".pdf"))
-    return status("માત્ર PDF file upload કરી શકાય.");
-  if (file.size > 10 * 1024 * 1024)
-    return status("PDF 10 MB કરતાં નાની હોવી જોઈએ.");
-
-  const semester = Number(document.getElementById("semester").value);
-  const subject = document.getElementById("subject").value.trim();
-  const unit = document.getElementById("unit").value;
-  const title = document.getElementById("title").value.trim();
-
-  if (!subject || !title) return status("Subject અને title ભરો.");
-
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = semester + "/" + crypto.randomUUID() + "-" + safeName;
-
-  const button = document.getElementById("uploadButton");
-  button.disabled = true;
-  status("PDF upload થઈ રહી છે...");
-
-  try {
-    const { error: uploadError } = await db.storage
-      .from("notes")
-      .upload(path, file, {
-        contentType: "application/pdf",
-        upsert: false
-      });
-
-    if (uploadError) throw uploadError;
-
-    const { error: insertError } = await db.from("notes").insert({
-      title, semester, subject, unit, file_path: path
-    });
-
-    if (insertError) {
-      await db.storage.from("notes").remove([path]);
-      throw insertError;
+  function getClient() {
+    if (
+      !SUPABASE_URL.startsWith("https://") ||
+      !SUPABASE_URL.endsWith(".supabase.co") ||
+      !SUPABASE_KEY.startsWith("sb_publishable_") ||
+      !ADMIN_UID
+    ) {
+      throw new Error("Supabase settings પહેલાં પૂર્ણ કરો.");
     }
 
-    uploadForm.reset();
-    status("PDF સફળતાથી upload થઈ! 🎉");
-    await refreshNotes();
-  } catch (error) {
-    status("Upload error: " + error.message);
-  } finally {
-    button.disabled = false;
-  }
-});
-
-async function refreshNotes() {
-  if (!db) return;
-  const { data, error } = await db.from("notes")
-    .select("id,title,semester,subject,unit,file_path,created_at")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    notesBox.textContent = "Notes load error: " + error.message;
-    return;
+    if (!db) {
+      if (!window.supabase) {
+        throw new Error("Supabase library load થઈ નથી. Internet ચેક કરો.");
+      }
+      db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    }
+    return db;
   }
 
-  allNotes = data || [];
-  renderNotes();
-}
-
-function renderNotes() {
-  notesBox.replaceChildren();
-
-  const query = document.getElementById("search").value.toLowerCase().trim();
-  const filtered = allNotes.filter(n =>
-    [n.title, n.subject, n.unit, String(n.semester)]
-      .some(v => v.toLowerCase().includes(query))
-  );
-
-  if (!filtered.length) {
-    notesBox.textContent = "હજી matching notes ઉપલબ્ધ નથી.";
-    return;
+  function isAdmin() {
+    return Boolean(currentUser && currentUser.id === ADMIN_UID);
   }
 
-  filtered.forEach(n => {
-    const item = document.createElement("div");
-    item.className = "note";
+  function updateLoginUI() {
+    $("loginForm").classList.toggle("hidden", Boolean(currentUser));
+    $("logoutButton").classList.toggle("hidden", !currentUser);
+    $("adminPanel").classList.toggle("hidden", !isAdmin());
 
-    const heading = document.createElement("strong");
-    heading.textContent = n.title;
+    if (currentUser && !isAdmin()) {
+      setStatus(loginStatus,
+        "આ account admin નથી. Admin account થી login કરો.", true);
+    } else if (isAdmin()) {
+      setStatus(loginStatus, "Admin login સફળ થયું!");
+    }
+  }
 
-    const detail = document.createElement("p");
-    detail.className = "muted";
-    detail.textContent = "Sem " + n.semester + " • " + n.subject + " • " + n.unit;
+  async function loadNotes() {
+    try {
+      getClient();
 
-    const download = document.createElement("button");
-    download.textContent = "View / Download PDF";
-    download.addEventListener("click", async () => {
-      const { data, error } = await db.storage
-        .from("notes").createSignedUrl(n.file_path, 3600);
+      const { data, error } = await db
+        .from("notes")
+        .select("id,title,semester,subject,unit,file_path,created_at")
+        .order("created_at", { ascending: false });
 
-      if (error) return status("PDF error: " + error.message);
-      window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+      if (error) throw error;
+
+      allNotes = data || [];
+      renderNotes();
+    } catch (error) {
+      notesList.textContent =
+        "Notes load ન થઈ શકી: " + error.message;
+    }
+  }
+
+  function renderNotes() {
+    const searchTerm = $("search").value.trim().toLowerCase();
+    const selectedSemester = $("semesterFilter").value;
+
+    const filtered = allNotes.filter((note) => {
+      const content = [
+        note.title, note.subject, note.unit, note.semester
+      ].join(" ").toLowerCase();
+
+      return content.includes(searchTerm) &&
+        (!selectedSemester ||
+          String(note.semester) === selectedSemester);
     });
 
-    item.append(heading, detail, download);
-
-    const userPlaceholder = null;
-    // Delete button is shown only to the authorized Admin.
-    // Database and storage policies must enforce Admin permissions.
-    if (!adminBox.classList.contains("hidden")) {
-      const remove = document.createElement("button");
-      remove.textContent = "Delete note";
-      remove.className = "danger";
-      remove.addEventListener("click", async () => {
-        if (!confirm("આ note અને તેની PDF delete કરવી છે?")) return;
-        const { error: fileError } = await db.storage
-          .from("notes").remove([n.file_path]);
-        if (fileError) return status("PDF delete error: " + fileError.message);
-
-        const { error: rowError } = await db.from("notes")
-          .delete().eq("id", n.id);
-        if (rowError) return status("Record delete error: " + rowError.message);
-
-        status("Note deleted.");
-        await refreshNotes();
-      });
-      item.append(remove);
+    if (!filtered.length) {
+      notesList.textContent = allNotes.length
+        ? "આ search માટે notes મળી નથી."
+        : "હજી notes upload કરવામાં આવી નથી.";
+      return;
     }
 
-    notesBox.append(item);
-  });
-}
+    notesList.innerHTML = filtered.map((note) => `
+      <article class="note">
+        <span class="tag">Semester ${escapeHTML(note.semester)}</span>
+        <h3>${escapeHTML(note.title)}</h3>
+        <p class="muted">
+          Subject: ${escapeHTML(note.subject)}<br>
+          ${escapeHTML(note.unit)}
+        </p>
+        <button type="button" data-download="${escapeHTML(note.id)}">
+          View / Download PDF
+        </button>
+        ${isAdmin() ? `
+          <button type="button" class="danger"
+            data-delete="${escapeHTML(note.id)}">
+            Delete Note
+          </button>` : ""}
+      </article>
+    `).join("");
+  }
 
-document.getElementById("search").addEventListener("input", renderNotes);
+  $("search").addEventListener("input", renderNotes);
+  $("semesterFilter").addEventListener("change", renderNotes);
+
+  notesList.addEventListener("click", async (event) => {
+    const downloadId = event.target.dataset.download;
+    const deleteId = event.target.dataset.delete;
+
+    if (downloadId) {
+      const note = allNotes.find((item) => item.id === downloadId);
+      if (!note) return;
+
+      try {
+        const { data, error } = await getClient()
+          .storage.from("notes")
+          .createSignedUrl(note.file_path, 3600);
+
+        if (error) throw error;
+        window.open(data.signedUrl, "_blank", "noopener,noreferrer");
+      } catch (error) {
+        alert("PDF ખોલી શકાઈ નથી: " + error.message);
+      }
+    }
+
+    if (deleteId) {
+      if (!isAdmin()) {
+        alert("આ action માટે admin login જરૂરી છે.");
+        return;
+      }
+
+      const note = allNotes.find((item) => item.id === deleteId);
+      if (!note || !confirm("આ note delete કરવી છે?")) return;
+
+      try {
+        const { error: storageError } = await getClient()
+          .storage.from("notes").remove([note.file_path]);
+
+        if (storageError) throw storageError;
+
+        const { error: dbError } = await getClient()
+          .from("notes").delete().eq("id", note.id);
+
+        if (dbError) throw dbError;
+
+        setStatus(uploadStatus, "Note delete થઈ ગઈ.");
+        await loadNotes();
+      } catch (error) {
+        alert("Delete થઈ શક્યું નથી: " + error.message);
+      }
+    }
+  });
+
+  $("loginForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const button = $("loginButton");
+    button.disabled = true;
+    setStatus(loginStatus, "Login થઈ રહ્યું છે...");
+
+    try {
+      const client = getClient();
+      const { data, error } = await client.auth.signInWithPassword({
+        email: $("email").value.trim(),
+        password: $("password").value
+      });
+
+      if (error) throw error;
+
+      currentUser = data.user;
+      updateLoginUI();
+
+      if (isAdmin()) {
+        setStatus(loginStatus, "Admin login સફળ થયું!");
+      } else {
+        await client.auth.signOut();
+        currentUser = null;
+        updateLoginUI();
+        setStatus(loginStatus,
+          "Login થયું, પરંતુ આ account ની UID admin UID સાથે મળતી નથી.",
+          true);
+      }
+
+      renderNotes();
+    } catch (error) {
+      setStatus(loginStatus, error.message, true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  $("logoutButton").addEventListener("click", async () => {
+    try {
+      const { error } = await getClient().auth.signOut();
+      if (error) throw error;
+
+      currentUser = null;
+      updateLoginUI();
+      renderNotes();
+      setStatus(loginStatus, "Logout થઈ ગયું.");
+    } catch (error) {
+      setStatus(loginStatus, error.message, true);
+    }
+  });
+
+  $("uploadForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    if (!isAdmin()) {
+      setStatus(uploadStatus, "પહેલાં admin login કરો.", true);
+      return;
+    }
+
+    const file = $("pdfFile").files[0];
+    if (!file) {
+      setStatus(uploadStatus, "PDF file પસંદ કરો.", true);
+      return;
+    }
+
+    if (
+      file.type !== "application/pdf" &&
+      !file.name.toLowerCase().endsWith(".pdf")
+    ) {
+      setStatus(uploadStatus, "માત્ર PDF file upload કરી શકાય.", true);
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setStatus(uploadStatus, "PDF file 10 MB થી નાની હોવી જોઈએ.", true);
+      return;
+    }
+
+    const button = $("uploadButton");
+    button.disabled = true;
+    setStatus(uploadStatus, "PDF upload થઈ રહી છે...");
+
+    let uploadedPath = null;
+
+    try {
+      const client = getClient();
+      const semester = $("semester").value;
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const filePath =
+        `${semester}/${crypto.randomUUID()}-${safeName}`;
+
+      const { error: storageError } = await client
+        .storage.from("notes")
+        .upload(filePath, file, {
+          contentType: "application/pdf",
+          upsert: false
+        });
+
+      if (storageError) throw storageError;
+      uploadedPath = filePath;
+
+      const { error: insertError } = await client
+        .from("notes")
+        .insert({
+          title: $("title").value.trim(),
+          semester: Number(semester),
+          subject: $("subject").value.trim(),
+          unit: $("unit").value.trim(),
+          file_path: filePath
+        });
+
+      if (insertError) {
+        // If database insert fails, try to remove the uploaded file.
+        await client.storage.from("notes").remove([uploadedPath]);
+        throw insertError;
+      }
+
+      $("uploadForm").reset();
+      setStatus(uploadStatus, "PDF સફળતાપૂર્વક upload થઈ ગઈ!");
+      await loadNotes();
+    } catch (error) {
+      setStatus(uploadStatus, "Upload નિષ્ફળ: " + error.message, true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  async function startApp() {
+    try {
+      const client = getClient();
+      const { data, error } = await client.auth.getSession();
+      if (error) throw error;
+
+      currentUser = data.session?.user || null;
+
+      if (currentUser && !isAdmin()) {
+        await client.auth.signOut();
+        currentUser = null;
+      }
+
+      updateLoginUI();
+      await loadNotes();
+
+      client.auth.onAuthStateChange((_event, session) => {
+        currentUser = session?.user || null;
+        updateLoginUI();
+        renderNotes();
+      });
+    } catch (error) {
+      notesList.textContent = error.message;
+      setStatus(loginStatus, error.message, true);
+    }
+  }
+
+  startApp();
 </script>
 </body>
 </html>
